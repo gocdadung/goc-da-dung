@@ -32,12 +32,37 @@
     line-height: 1.5;
   }
 
+  /* Banner: gradient chéo + 2 quầng sáng trang trí (sage & terracotta) để tạo chiều sâu, sang hơn nền phẳng */
   header{
-    background: var(--banner-bg);
+    background: linear-gradient(135deg, #37473A 0%, #202B23 55%, #2B3A2E 100%);
     color: var(--banner-text);
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before{
+    content:"";
+    position:absolute;
+    top:-140px; right:-110px;
+    width:380px; height:380px;
+    border-radius:50%;
+    background: radial-gradient(circle, rgba(185,196,169,0.20), transparent 70%);
+    pointer-events:none;
+  }
+
+  header::after{
+    content:"";
+    position:absolute;
+    bottom:-100px; left:-70px;
+    width:280px; height:280px;
+    border-radius:50%;
+    background: radial-gradient(circle, rgba(169,130,92,0.18), transparent 70%);
+    pointer-events:none;
   }
 
   header .header-inner{
+    position: relative;
+    z-index: 1;
     max-width: 960px;
     margin: 0 auto;
     padding: 56px 24px 40px;
@@ -47,9 +72,23 @@
     font-family: 'Fraunces', serif;
     font-weight: 500;
     font-size: clamp(2rem, 5vw, 2.8rem);
-    margin: 0 0 12px;
+    margin: 0 0 18px;
     letter-spacing: -0.01em;
     color: var(--banner-text);
+    position: relative;
+    display: inline-block;
+    padding-bottom: 16px;
+  }
+
+  /* chi tiết nhấn terracotta dưới tiêu đề banner — đồng bộ với chi tiết nhấn dưới tiêu đề mỗi mục */
+  header h1::after{
+    content:"";
+    position:absolute;
+    left:0; bottom:0;
+    width: 56px;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--clay);
   }
 
   header p{
@@ -67,34 +106,28 @@
     border-bottom: 1px solid var(--line);
   }
 
-  /* fade mép phải báo hiệu còn tab bị che khi cuộn ngang */
-  nav::after{
-    content:"";
-    position:absolute;
-    top:0; right:0; bottom:0;
-    width:44px;
-    background: linear-gradient(to right, transparent, var(--bg) 75%);
-    pointer-events:none;
-  }
-
+  /* hàng tab: lưới cố định 3 cột x 2 hàng, dùng chung cấu trúc cho cả PC và mobile để không mục nào bị cắt/che */
   .nav-inner{
     max-width: 960px;
     margin: 0 auto;
-    padding: 16px 24px;
-    display: flex;
+    padding: 18px 24px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 12px;
-    overflow-x: auto;
-    position: relative;
   }
 
   nav a{
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     color: var(--ink);
     text-decoration: none;
-    font-size: 0.88rem;
+    font-size: 0.98rem;
     font-weight: 500;
-    white-space: nowrap;
-    padding: 10px 16px;
+    white-space: normal;
+    line-height: 1.25;
+    padding: 16px 14px;
     background: var(--card);
     border: 1px solid var(--line);
     border-radius: 8px;
@@ -133,7 +166,7 @@
   section.category{
     padding-top: 56px;
     padding-bottom: 56px;
-    scroll-margin-top: 76px;
+    scroll-margin-top: 96px;
     border-top: 1px solid var(--line);
   }
 
@@ -277,7 +310,7 @@
     .view-all-wrap.mobile-hide{ display: none; }
   }
 
-  /* mục chưa có sản phẩm (vd Hot Trend lúc mới tạo) */
+  /* mục chưa có sản phẩm */
   .empty-note{
     color: var(--ink-soft);
     font-size: 0.92rem;
@@ -288,19 +321,13 @@
     border-radius: 8px;
   }
 
-  /* Thanh menu hạng mục trên mobile: hiện đủ 6 ô cùng lúc, không cần vuốt ngang */
+  /* Thu nhỏ hàng tab trên màn hình hẹp để 3 cột vẫn vừa vặn, không đổi cấu trúc lưới */
   @media (max-width: 640px){
-    nav::after{ display: none; }
     .nav-inner{
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
       gap: 8px;
-      overflow-x: visible;
       padding: 14px 16px;
     }
     nav a{
-      text-align: center;
-      white-space: normal;
       padding: 10px 6px;
       font-size: 0.78rem;
     }
@@ -339,6 +366,10 @@
 /* ============================================================
    DỮ LIỆU SẢN PHẨM — chỉ cần chỉnh sửa trong mảng này
    ============================================================
+   6 mục cố định, theo đúng thứ tự hiển thị trên lưới tab (3 cột x 2 hàng):
+   Hàng 1: Chăm Sóc Da & Năng Lượng — Ăn Uống Dưỡng Nhan — Đồ Dùng Quanh Nhà
+   Hàng 2: Sách & Dụng Cụ Học Tập — Hồ Cá & Sân Vườn — Sản Phẩm Hot Trend
+
    Mỗi hạng mục là một object trong mảng CATEGORIES:
    - name: tên hạng mục (hiển thị làm tiêu đề section + menu)
    - items: danh sách sản phẩm trong hạng mục đó (để [] nếu chưa có sản phẩm nào)
@@ -348,11 +379,11 @@
        - note: MỘT DÒNG cảm nhận cá nhân về món này
 
    LƯU Ý:
-   - Mục "Chăm Sóc Da & Năng Lượng" đang là gộp của 2 mục cũ
-     (Chăm Sóc Da & Mátxa + Thiền & Năng Lượng) — tên sản phẩm bên trong
-     đang tạm giữ nguyên như cũ, sẽ chỉnh lại sau khi có link Shopee thật.
-   - Mục "Hot Trend" (cuối trang) hiện chưa có sản phẩm — thêm sản phẩm theo
-     mùa/dịp/lễ vào mảng items của mục này khi cần.
+   - "Sản Phẩm Hot Trend" đang là demo, thay ảnh/link Shopee thật khi có.
+   - "Đồ Dùng Quanh Nhà" gồm cả nguyên liệu nấu ăn, dụng cụ bếp và đồ nội thất/
+     trang trí phòng khách (bàn, ghế, bình hoa...) — sắp nhóm bếp lên trước,
+     nhóm nội thất/trang trí xuống sau trong danh sách item để người tìm đồ
+     bếp thấy đúng nhu cầu trước.
 
    HIỂN THỊ:
    - PC: mỗi mục hiện cố định 5 sản phẩm đầu.
@@ -393,7 +424,7 @@ const CATEGORIES = [
     ]
   },
   {
-    name: "Nhà Bếp",
+    name: "Đồ Dùng Quanh Nhà",
     items: [
       { name: "Bột bánh xèo", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Pha theo tỷ lệ trên bao bì là ra vỏ giòn ngay lần đầu." },
       { name: "Phô mai mặn", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Vị mặn vừa, hợp làm bánh mặn cho bé." },
@@ -415,7 +446,7 @@ const CATEGORIES = [
     ]
   },
   {
-    name: "Sân Vườn",
+    name: "Hồ Cá & Sân Vườn",
     items: [
       { name: "Đèn LED sân vườn", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Sáng đều, bật ban đêm nhìn sân đẹp hẳn." },
       { name: "Máy bơm hồ cá", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Chạy êm, hồ nhà mình dùng ổn định cả năm." },
@@ -426,8 +457,15 @@ const CATEGORIES = [
     ]
   },
   {
-    name: "Hot Trend",
-    items: []
+    name: "Sản Phẩm Hot Trend",
+    items: [
+      { name: "Bánh Tráng Bò Tỏi Chua Cay", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "" },
+      { name: "Bánh Trung Thu Nhân Ca Cao", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "" },
+      { name: "Kẹp Tóc Xinh", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "" },
+      { name: "Gấu Bông Capybara", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "" },
+      { name: "Khóm Sấy Dẻo Muối Ớt", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "" },
+      { name: "Bánh Dừa Nướng Mix 3 Vị", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "" }
+    ]
   }
 ];
 
