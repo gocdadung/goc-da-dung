@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Góc Đã Dùng — sản phẩm mình từng trải nghiệm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F4EFE3;
+    --card: #FBF8F1;
+    --ink: #2B3A2E;
+    --ink-soft: #6B6357;
+    --line: #DCD4C0;
+    --sage: #B9C4A9;
+    --clay: #A9825C;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Work Sans', sans-serif;
+    line-height: 1.5;
+  }
+
+  header{
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 64px 24px 32px;
+  }
+
+  header h1{
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+  }
+
+  header p{
+    max-width: 46ch;
+    color: var(--ink-soft);
+    font-size: 1.02rem;
+    margin: 0;
+  }
+
+  nav{
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 10;
+    border-bottom: 1px solid var(--line);
+    padding: 14px 24px;
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  nav a{
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 0.92rem;
+    white-space: nowrap;
+    padding-bottom: 4px;
+    border-bottom: 2px solid transparent;
+    transition: color .15s ease, border-color .15s ease;
+  }
+
+  nav a:hover{
+    color: var(--ink);
+    border-color: var(--clay);
+  }
+
+  main{
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  section.category{
+    padding-top: 56px;
+    scroll-margin-top: 64px;
+  }
+
+  section.category h2{
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 1.5rem;
+    margin: 0 0 4px;
+  }
+
+  section.category .count{
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+    margin: 0 0 24px;
+  }
+
+  .grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+  }
+
+  .item a.thumb{
+    display: block;
+    aspect-ratio: 1 / 1;
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--card);
+    border: 1px solid var(--line);
+  }
+
+  .item img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .3s ease;
+  }
+
+  .item a.thumb:hover img{
+    transform: scale(1.04);
+  }
+
+  .item .name{
+    margin-top: 10px;
+    font-size: 0.93rem;
+    color: var(--ink);
+  }
+
+  footer{
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+    border-top: 1px solid var(--line);
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+  }
+
+  footer a{ color: var(--clay); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Góc Đã Dùng</h1>
+  <p>Những món mình thực sự dùng qua và thấy đáng để nhắc lại — sắp theo từng nhóm nhỏ cho dễ tìm.</p>
+</header>
+
+<nav id="catNav"></nav>
+
+<main id="main"></main>
+
+<footer>
+  Trang này có chứa liên kết tiếp thị liên kết (affiliate) tới Shopee. Khi bạn mua hàng qua các liên kết này, mình có thể nhận được một khoản hoa hồng nhỏ, không phát sinh thêm chi phí cho bạn.
+</footer>
+
+<script>
+/* ============================================================
+   DỮ LIỆU SẢN PHẨM — chỉ cần chỉnh sửa trong mảng này
+   ============================================================
+   Mỗi hạng mục là một object trong mảng CATEGORIES:
+   - name: tên hạng mục (hiển thị làm tiêu đề section + menu)
+   - items: danh sách sản phẩm trong hạng mục đó
+       - name: tên sản phẩm
+       - image: link ảnh sản phẩm (có thể lấy từ ảnh Shopee hoặc ảnh tự chụp upload lên đâu đó)
+       - link: link Shopee affiliate của sản phẩm (lấy từ mục Generate Link trên affiliate.shopee.vn)
+
+   Muốn thêm hạng mục mới: copy nguyên một object { name: ..., items: [...] }
+   và dán vào cuối mảng, trước dấu ] đóng.
+
+   Muốn thêm sản phẩm: copy nguyên một dòng { name:..., image:..., link:... }
+   trong "items" của hạng mục tương ứng.
+   ============================================================ */
+
+const CATEGORIES = [
+  {
+    name: "Chăm Sóc Da & Mátxa",
+    items: [
+      { name: "Điếu ngải cứu hơ huyệt đạo", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Lăn ngải cứu cho da mặt", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Đá lăn mátxa mặt", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Máy xông hơi mặt mini", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
+    ]
+  },
+  {
+    name: "Ăn Uống Dưỡng Nhan",
+    items: [
+      { name: "Ngũ cốc dưỡng nhan", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Chè dưỡng nhan", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Trà dưỡng nhan", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Kombucha", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
+    ]
+  },
+  {
+    name: "Nhà Bếp",
+    items: [
+      { name: "Bình giữ nhiệt thủy tinh", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Thớt gỗ tự nhiên", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Hũ thủy tinh đựng gia vị", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
+    ]
+  },
+  {
+    name: "Sách & Dụng Cụ Học Tập",
+    items: [
+      { name: "Sách tiếng Anh được review", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Đèn bàn học chống cận", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Bộ bút highlight", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
+    ]
+  },
+  {
+    name: "Sân Vườn",
+    items: [
+      { name: "Đèn trang trí sân vườn", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Bình tưới cây dáng cổ điển", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Máy bơm hồ cá mini", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
+    ]
+  },
+  {
+    name: "Thiền & Năng Lượng",
+    items: [
+      { name: "Chuông xoay Tây Tạng", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Vòng đá năng lượng", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
+    ]
+  }
+];
+
+/* ============================================================
+   PHẦN DƯỚI ĐÂY LÀ CODE HIỂN THỊ — không cần chỉnh sửa
+   ============================================================ */
+
+function slugify(str){
+  return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-");
+}
+
+const nav = document.getElementById("catNav");
+const main = document.getElementById("main");
+
+CATEGORIES.forEach(cat => {
+  const slug = slugify(cat.name);
+
+  const navLink = document.createElement("a");
+  navLink.href = "#" + slug;
+  navLink.textContent = cat.name;
+  nav.appendChild(navLink);
+
+  const section = document.createElement("section");
+  section.className = "category";
+  section.id = slug;
+
+  const h2 = document.createElement("h2");
+  h2.textContent = cat.name;
+  section.appendChild(h2);
+
+  const count = document.createElement("p");
+  count.className = "count";
+  count.textContent = cat.items.length + " sản phẩm";
+  section.appendChild(count);
+
+  const grid = document.createElement("div");
+  grid.className = "grid";
+
+  cat.items.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "item";
+    div.innerHTML = `
+      <a class="thumb" href="${item.link}" target="_blank" rel="noopener sponsored">
+        <img src="${item.image}" alt="${item.name}" loading="lazy">
+      </a>
+      <div class="name">${item.name}</div>
+    `;
+    grid.appendChild(div);
+  });
+
+  section.appendChild(grid);
+  main.appendChild(section);
+});
+</script>
+
+</body>
+</html>
