@@ -54,11 +54,15 @@
     background: var(--bg);
     z-index: 10;
     border-bottom: 1px solid var(--line);
+  }
+
+  .nav-inner{
+    max-width: 960px;
+    margin: 0 auto;
     padding: 14px 24px;
     display: flex;
     gap: 24px;
     overflow-x: auto;
-    max-width: 100%;
   }
 
   nav a{
@@ -152,7 +156,7 @@
   <p>Những món mình thực sự dùng qua và thấy đáng để nhắc lại — sắp theo từng nhóm nhỏ cho dễ tìm.</p>
 </header>
 
-<nav id="catNav"></nav>
+<nav><div class="nav-inner" id="catNav"></div></nav>
 
 <main id="main"></main>
 
