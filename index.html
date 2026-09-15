@@ -9,12 +9,14 @@
 <style>
   :root{
     --bg: #F4EFE3;
-    --card: #FBF8F1;
+    --band-b: #ECE4D2;
+    --card: #FFFFFF;
     --ink: #2B3A2E;
     --ink-soft: #6B6357;
     --line: #DCD4C0;
     --sage: #B9C4A9;
     --clay: #A9825C;
+    --clay-dark: #8A6741;
     --banner-bg: #2B3A2E;
     --banner-text: #F4EFE3;
     --banner-text-soft: #C7CFC1;
@@ -65,6 +67,16 @@
     border-bottom: 1px solid var(--line);
   }
 
+  /* fade mép phải báo hiệu còn tab bị che khi cuộn ngang */
+  nav::after{
+    content:"";
+    position:absolute;
+    top:0; right:0; bottom:0;
+    width:44px;
+    background: linear-gradient(to right, transparent, var(--bg) 75%);
+    pointer-events:none;
+  }
+
   .nav-inner{
     max-width: 960px;
     margin: 0 auto;
@@ -72,6 +84,7 @@
     display: flex;
     gap: 12px;
     overflow-x: auto;
+    position: relative;
   }
 
   nav a{
@@ -86,7 +99,7 @@
     border: 1px solid var(--line);
     border-radius: 8px;
     border-bottom: 3px solid var(--line);
-    transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+    transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease, background .15s ease, color .15s ease;
   }
 
   nav a:hover{
@@ -95,15 +108,37 @@
     box-shadow: 0 6px 14px rgba(43,58,46,0.12);
   }
 
-  main{
+  /* tab đang chọn — dùng màu nhấn terracotta */
+  nav a.active{
+    background: var(--clay);
+    border-color: var(--clay);
+    color: #fff;
+  }
+
+  nav a.active:hover{
+    transform: none;
+  }
+
+  /* mỗi mục nằm trong 1 "band" full-width để tạo sắc độ xen kẽ, dễ phân biệt mà vẫn cùng tông màu */
+  .band{ width: 100%; }
+  .band-a{ background: var(--bg); }
+  .band-b{ background: var(--band-b); }
+
+  .band-inner{
     max-width: 960px;
     margin: 0 auto;
-    padding: 0 24px 80px;
+    padding: 0 24px;
   }
 
   section.category{
     padding-top: 56px;
+    padding-bottom: 56px;
     scroll-margin-top: 76px;
+    border-top: 1px solid var(--line);
+  }
+
+  .band:first-of-type section.category{
+    border-top: none;
   }
 
   section.category h2{
@@ -111,6 +146,20 @@
     font-weight: 500;
     font-size: 1.5rem;
     margin: 0 0 4px;
+    padding-bottom: 10px;
+    position: relative;
+  }
+
+  /* chi tiết nhỏ terracotta dưới mỗi tiêu đề mục */
+  section.category h2::after{
+    content:"";
+    display:block;
+    position:absolute;
+    left:0; bottom:0;
+    width: 36px;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--clay);
   }
 
   section.category .count{
@@ -133,6 +182,7 @@
     .grid{ grid-template-columns: repeat(2, 1fr); }
   }
 
+  /* thẻ sản phẩm — trắng + bóng đổ nhẹ để nổi rõ trên nền */
   .item a.thumb{
     display: block;
     aspect-ratio: 1 / 1;
@@ -140,6 +190,13 @@
     overflow: hidden;
     background: var(--card);
     border: 1px solid var(--line);
+    box-shadow: 0 1px 4px rgba(43,58,46,0.08);
+    transition: box-shadow .2s ease, border-color .2s ease;
+  }
+
+  .item a.thumb:hover{
+    box-shadow: 0 8px 18px rgba(43,58,46,0.16);
+    border-color: var(--clay);
   }
 
   .item img{
@@ -158,11 +215,44 @@
     margin-top: 10px;
     font-size: 0.9rem;
     color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* dòng cảm nhận cá nhân mỗi món */
+  .item .note{
+    margin-top: 4px;
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--ink-soft);
+    line-height: 1.35;
+  }
+
+  /* nút hành động terracotta cho từng sản phẩm */
+  .item .cta{
+    display: inline-block;
+    margin-top: 8px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--clay);
+    color: #fff;
+    font-size: 0.74rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background .15s ease;
+  }
+
+  .item .cta:hover{
+    background: var(--clay-dark);
   }
 
   .item.extra{ display: none; }
 
   section.category.expanded .item.extra{ display: block; }
+
+  /* sản phẩm thứ 6 (index 5): mobile luôn hiện, desktop coi như "extra" tới khi bấm Xem tất cả */
+  @media (max-width: 700px){
+    .item.mobile-visible{ display: block !important; }
+  }
 
   .view-all-wrap{
     margin-top: 20px;
@@ -180,10 +270,27 @@
     cursor: pointer;
   }
 
-  .view-all:hover{ color: var(--ink); border-color: var(--ink); }
+  .view-all:hover{ color: var(--clay-dark); border-color: var(--clay-dark); }
+
+  /* mục chỉ có đúng 6 sản phẩm: mobile đã hiện đủ nên ẩn luôn nút Xem tất cả trên mobile */
+  @media (max-width: 700px){
+    .view-all-wrap.mobile-hide{ display: none; }
+  }
+
+  /* mục chưa có sản phẩm (vd Hot Trend lúc mới tạo) */
+  .empty-note{
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+    font-style: italic;
+    padding: 18px 20px;
+    background: var(--card);
+    border: 1px dashed var(--line);
+    border-radius: 8px;
+  }
 
   /* Thanh menu hạng mục trên mobile: hiện đủ 6 ô cùng lúc, không cần vuốt ngang */
   @media (max-width: 640px){
+    nav::after{ display: none; }
     .nav-inner{
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -216,13 +323,13 @@
 <header>
   <div class="header-inner">
     <h1>Góc Đã Dùng</h1>
-    <p>Những món mình thực sự dùng qua và thấy đáng để nhắc lại — sắp theo từng nhóm nhỏ cho dễ tìm.</p>
+    <p>Những món mình thực sự dùng qua và thấy đáng để gợi ý — sắp theo từng nhóm nhỏ cho dễ tìm.</p>
   </div>
 </header>
 
 <nav><div class="nav-inner" id="catNav"></div></nav>
 
-<main id="main"></main>
+<div id="main"></div>
 
 <footer>
   Trang này có chứa liên kết tiếp thị liên kết (affiliate) tới Shopee. Khi bạn mua hàng qua các liên kết này, mình có thể nhận được một khoản hoa hồng nhỏ, không phát sinh thêm chi phí cho bạn.
@@ -234,90 +341,93 @@
    ============================================================
    Mỗi hạng mục là một object trong mảng CATEGORIES:
    - name: tên hạng mục (hiển thị làm tiêu đề section + menu)
-   - items: danh sách sản phẩm trong hạng mục đó
+   - items: danh sách sản phẩm trong hạng mục đó (để [] nếu chưa có sản phẩm nào)
        - name: tên sản phẩm
-       - image: link ảnh sản phẩm (có thể lấy từ ảnh Shopee hoặc ảnh tự chụp upload lên đâu đó)
-       - link: link Shopee affiliate của sản phẩm (lấy từ mục Generate Link trên affiliate.shopee.vn)
+       - image: link ảnh sản phẩm
+       - link: link Shopee affiliate của sản phẩm
+       - note: MỘT DÒNG cảm nhận cá nhân về món này
 
-   Muốn thêm hạng mục mới: copy nguyên một object { name: ..., items: [...] }
-   và dán vào cuối mảng, trước dấu ] đóng.
+   LƯU Ý:
+   - Mục "Chăm Sóc Da & Năng Lượng" đang là gộp của 2 mục cũ
+     (Chăm Sóc Da & Mátxa + Thiền & Năng Lượng) — tên sản phẩm bên trong
+     đang tạm giữ nguyên như cũ, sẽ chỉnh lại sau khi có link Shopee thật.
+   - Mục "Hot Trend" (cuối trang) hiện chưa có sản phẩm — thêm sản phẩm theo
+     mùa/dịp/lễ vào mảng items của mục này khi cần.
 
-   Muốn thêm sản phẩm: copy nguyên một dòng { name:..., image:..., link:... }
-   trong "items" của hạng mục tương ứng.
-
-   LƯU Ý: trang chủ chỉ hiện CỐ ĐỊNH 5 sản phẩm đầu tiên của mỗi hạng mục.
-   Từ sản phẩm thứ 6 trở đi sẽ tự động ẩn, người xem bấm "Xem tất cả" mới thấy hết.
-   Muốn đổi số lượng hiện mặc định, sửa biến VISIBLE_COUNT bên dưới.
+   HIỂN THỊ:
+   - PC: mỗi mục hiện cố định 5 sản phẩm đầu.
+   - Mobile: mỗi mục hiện cố định 6 sản phẩm đầu (tránh lẻ ô trống).
+   - Từ sản phẩm tiếp theo trở đi ẩn, bấm "Xem tất cả" mới hiện hết.
    ============================================================ */
 
-const VISIBLE_COUNT = 5;
+const VISIBLE_COUNT_DESKTOP = 5;
+const VISIBLE_COUNT_MOBILE = 6;
 
 const CATEGORIES = [
   {
-    name: "Chăm Sóc Da & Mátxa",
+    name: "Chăm Sóc Da & Năng Lượng",
     items: [
-      { name: "Điếu ngải cứu hơ huyệt đạo", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Máy xông ngải cứu", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Lược diện chẩn", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Đá mátxa mặt", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Cây lăn diện chẩn", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Dầu mátxa mặt", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
+      { name: "Điếu ngải cứu hơ huyệt đạo", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Xông đều tay ấm hẳn vùng cổ vai, tối dùng là ngủ ngon hơn." },
+      { name: "Máy xông ngải cứu", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Tiện hơn cầm điếu ngải, không lo tàn rơi lung tung." },
+      { name: "Lược diện chẩn", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Chải mỗi sáng vài phút, đầu nhẹ và tỉnh táo hơn hẳn." },
+      { name: "Đá mátxa mặt", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Để tủ lạnh rồi lăn buổi sáng, mặt bớt phù rõ." },
+      { name: "Cây lăn diện chẩn", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Lăn vùng mặt và tay, thao tác dễ hơn lược nhiều." },
+      { name: "Dầu mátxa mặt", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Thấm nhanh, không nhờn rít, mátxa trơn tay." },
+      { name: "Chuông thạch anh", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Âm thanh trong, thiền dễ tĩnh tâm hơn." },
+      { name: "Chuông xoay Tây Tạng", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Gõ vài vòng là thấy đầu óc nhẹ hẳn." },
+      { name: "Gỗ thánh Palo Santo", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Đốt thơm nhẹ, không gắt mũi." },
+      { name: "Xô thanh tẩy", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Đốt kèm than, khói toả đều cả phòng." },
+      { name: "Đế đốt trầm", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Chắc chắn, không lo đổ tàn ra bàn." },
+      { name: "Đá thanh tẩy", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Lau sạch năng lượng đồ vật, hay dùng cho vòng tay." }
     ]
   },
   {
     name: "Ăn Uống Dưỡng Nhan",
     items: [
-      { name: "Trà dưỡng nhan", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Trà dưỡng huyết", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Chè dưỡng nhan", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Trà thảo mộc", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Trà hoa cúc", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Ngũ cốc hạt", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
+      { name: "Trà dưỡng nhan", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Uống đều mấy tuần thấy da sáng và đỡ nổi mụn hơn." },
+      { name: "Trà dưỡng huyết", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Hợp những ngày mệt, uống ấm dễ chịu bụng." },
+      { name: "Chè dưỡng nhan", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Nấu nhanh, ăn vặt buổi chiều mà không thấy có lỗi." },
+      { name: "Trà thảo mộc", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Vị nhẹ, uống thay nước lọc buổi tối được." },
+      { name: "Trà hoa cúc", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Uống trước khi ngủ giúp mình thư giãn hơn hẳn." },
+      { name: "Ngũ cốc hạt", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Ăn sáng nhanh gọn mà vẫn no lâu." }
     ]
   },
   {
     name: "Nhà Bếp",
     items: [
-      { name: "Bột bánh xèo", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Phô mai mặn", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Bột rau câu dẻo", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Khuôn rau câu", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Khuôn làm bánh", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Hộp nhựa đựng pizza", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
+      { name: "Bột bánh xèo", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Pha theo tỷ lệ trên bao bì là ra vỏ giòn ngay lần đầu." },
+      { name: "Phô mai mặn", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Vị mặn vừa, hợp làm bánh mặn cho bé." },
+      { name: "Bột rau câu dẻo", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Làm thạch dẻo mịn, con mình rất thích." },
+      { name: "Khuôn rau câu", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Nhiều hình dễ thương, đổ thạch xong dễ lấy ra." },
+      { name: "Khuôn làm bánh", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Chống dính tốt, rửa cũng nhanh." },
+      { name: "Hộp nhựa đựng pizza", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Đựng đồ ăn trữ tủ lạnh gọn, không ám mùi." }
     ]
   },
   {
     name: "Sách & Dụng Cụ Học Tập",
     items: [
-      { name: "Cặp xách", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Bút tô màu", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Bút không gôm", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Bút có gôm", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Nhãn vở", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Sách ngữ pháp tiếng Anh tiểu học", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
+      { name: "Cặp xách", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Bé đeo cả năm học chưa thấy bung chỉ." },
+      { name: "Bút tô màu", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Màu lên đều, không bị lem giấy." },
+      { name: "Bút không gôm", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Viết trơn tay, mực không bị lem." },
+      { name: "Bút có gôm", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Bé tự sửa lỗi được, không cần tẩy riêng." },
+      { name: "Nhãn vở", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Dán nhanh, giúp bé phân biệt vở các môn." },
+      { name: "Sách ngữ pháp tiếng Anh tiểu học", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Giải thích dễ hiểu, mình hay dùng để soạn bài dạy." }
     ]
   },
   {
     name: "Sân Vườn",
     items: [
-      { name: "Đèn LED sân vườn", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Máy bơm hồ cá", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Lọc Jmat", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Chổi lọc", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Hạt giống hoa mười giờ", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Hạt giống rau", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
+      { name: "Đèn LED sân vườn", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Sáng đều, bật ban đêm nhìn sân đẹp hẳn." },
+      { name: "Máy bơm hồ cá", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Chạy êm, hồ nhà mình dùng ổn định cả năm." },
+      { name: "Lọc Jmat", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Lọc nước hồ sạch, ít phải thay nước hơn." },
+      { name: "Chổi lọc", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Vệ sinh lọc hồ nhanh, không tốn nhiều nước." },
+      { name: "Hạt giống hoa mười giờ", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Gieo dễ lên, hoa nở đều quanh năm." },
+      { name: "Hạt giống rau", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Tỷ lệ nảy mầm cao, rau lên đều." }
     ]
   },
   {
-    name: "Thiền & Năng Lượng",
-    items: [
-      { name: "Chuông thạch anh", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Chuông xoay Tây Tạng", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Gỗ thánh Palo Santo", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Xô thanh tẩy", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Đế đốt trầm", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Đá thanh tẩy", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
-    ]
+    name: "Hot Trend",
+    items: []
   }
 ];
 
@@ -331,14 +441,23 @@ function slugify(str){
 
 const nav = document.getElementById("catNav");
 const main = document.getElementById("main");
+const navLinks = [];
+const sections = [];
 
-CATEGORIES.forEach(cat => {
+CATEGORIES.forEach((cat, catIndex) => {
   const slug = slugify(cat.name);
 
   const navLink = document.createElement("a");
   navLink.href = "#" + slug;
   navLink.textContent = cat.name;
   nav.appendChild(navLink);
+  navLinks.push(navLink);
+
+  const band = document.createElement("div");
+  band.className = "band " + (catIndex % 2 === 0 ? "band-a" : "band-b");
+
+  const bandInner = document.createElement("div");
+  bandInner.className = "band-inner";
 
   const section = document.createElement("section");
   section.className = "category";
@@ -348,46 +467,85 @@ CATEGORIES.forEach(cat => {
   h2.textContent = cat.name;
   section.appendChild(h2);
 
-  const count = document.createElement("p");
-  count.className = "count";
-  count.textContent = cat.items.length + " sản phẩm";
-  section.appendChild(count);
+  if (cat.items.length === 0){
+    const empty = document.createElement("p");
+    empty.className = "empty-note";
+    empty.textContent = "Đang cập nhật sản phẩm — quay lại sớm nhé!";
+    section.appendChild(empty);
+  } else {
+    const count = document.createElement("p");
+    count.className = "count";
+    count.textContent = cat.items.length + " sản phẩm";
+    section.appendChild(count);
 
-  const grid = document.createElement("div");
-  grid.className = "grid";
+    const grid = document.createElement("div");
+    grid.className = "grid";
 
-  cat.items.forEach((item, index) => {
-    const div = document.createElement("div");
-    div.className = "item" + (index >= VISIBLE_COUNT ? " extra" : "");
-    div.innerHTML = `
-      <a class="thumb" href="${item.link}" target="_blank" rel="noopener sponsored">
-        <img src="${item.image}" alt="${item.name}" loading="lazy">
-      </a>
-      <div class="name">${item.name}</div>
-    `;
-    grid.appendChild(div);
-  });
-
-  section.appendChild(grid);
-
-  if(cat.items.length > VISIBLE_COUNT){
-    const wrap = document.createElement("div");
-    wrap.className = "view-all-wrap";
-    const btn = document.createElement("button");
-    btn.className = "view-all";
-    btn.textContent = "Xem tất cả (" + cat.items.length + " sản phẩm)";
-    btn.addEventListener("click", () => {
-      const expanded = section.classList.toggle("expanded");
-      btn.textContent = expanded
-        ? "Thu gọn"
-        : "Xem tất cả (" + cat.items.length + " sản phẩm)";
+    cat.items.forEach((item, index) => {
+      const div = document.createElement("div");
+      let cls = "item";
+      if (index >= VISIBLE_COUNT_MOBILE){
+        cls += " extra";
+      } else if (index >= VISIBLE_COUNT_DESKTOP){
+        cls += " extra mobile-visible";
+      }
+      div.className = cls;
+      div.innerHTML = `
+        <a class="thumb" href="${item.link}" target="_blank" rel="noopener sponsored">
+          <img src="${item.image}" alt="${item.name}" loading="lazy">
+        </a>
+        <div class="name">${item.name}</div>
+        ${item.note ? `<div class="note">${item.note}</div>` : ``}
+        <a class="cta" href="${item.link}" target="_blank" rel="noopener sponsored">Xem trên Shopee →</a>
+      `;
+      grid.appendChild(div);
     });
-    wrap.appendChild(btn);
-    section.appendChild(wrap);
+
+    section.appendChild(grid);
+
+    if(cat.items.length > VISIBLE_COUNT_DESKTOP){
+      const wrap = document.createElement("div");
+      wrap.className = "view-all-wrap";
+      if (cat.items.length <= VISIBLE_COUNT_MOBILE){
+        wrap.classList.add("mobile-hide");
+      }
+      const btn = document.createElement("button");
+      btn.className = "view-all";
+      btn.textContent = "Xem tất cả (" + cat.items.length + " sản phẩm)";
+      btn.addEventListener("click", () => {
+        const expanded = section.classList.toggle("expanded");
+        btn.textContent = expanded
+          ? "Thu gọn"
+          : "Xem tất cả (" + cat.items.length + " sản phẩm)";
+      });
+      wrap.appendChild(btn);
+      section.appendChild(wrap);
+    }
   }
 
-  main.appendChild(section);
+  bandInner.appendChild(section);
+  band.appendChild(bandInner);
+  main.appendChild(band);
+  sections.push(section);
 });
+
+/* Đánh dấu tab đang chọn theo mục đang cuộn tới trong khung nhìn */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    const idx = sections.indexOf(entry.target);
+    if (idx === -1) return;
+    if (entry.isIntersecting){
+      navLinks.forEach(l => l.classList.remove("active"));
+      navLinks[idx].classList.add("active");
+    }
+  });
+}, { rootMargin: "-40% 0px -55% 0px", threshold: 0 });
+
+sections.forEach(s => observer.observe(s));
+
+if (navLinks.length){
+  navLinks[0].classList.add("active");
+}
 </script>
 
 </body>
