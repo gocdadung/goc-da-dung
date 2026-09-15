@@ -15,6 +15,9 @@
     --line: #DCD4C0;
     --sage: #B9C4A9;
     --clay: #A9825C;
+    --banner-bg: #2B3A2E;
+    --banner-text: #F4EFE3;
+    --banner-text-soft: #C7CFC1;
   }
 
   *{ box-sizing: border-box; }
@@ -28,9 +31,14 @@
   }
 
   header{
+    background: var(--banner-bg);
+    color: var(--banner-text);
+  }
+
+  header .header-inner{
     max-width: 960px;
     margin: 0 auto;
-    padding: 64px 24px 32px;
+    padding: 56px 24px 40px;
   }
 
   header h1{
@@ -39,11 +47,12 @@
     font-size: clamp(2rem, 5vw, 2.8rem);
     margin: 0 0 12px;
     letter-spacing: -0.01em;
+    color: var(--banner-text);
   }
 
   header p{
     max-width: 46ch;
-    color: var(--ink-soft);
+    color: var(--banner-text-soft);
     font-size: 1.02rem;
     margin: 0;
   }
@@ -59,25 +68,31 @@
   .nav-inner{
     max-width: 960px;
     margin: 0 auto;
-    padding: 14px 24px;
+    padding: 16px 24px;
     display: flex;
-    gap: 24px;
+    gap: 12px;
     overflow-x: auto;
   }
 
   nav a{
-    color: var(--ink-soft);
+    display: block;
+    color: var(--ink);
     text-decoration: none;
-    font-size: 0.92rem;
+    font-size: 0.88rem;
+    font-weight: 500;
     white-space: nowrap;
-    padding-bottom: 4px;
-    border-bottom: 2px solid transparent;
-    transition: color .15s ease, border-color .15s ease;
+    padding: 10px 16px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    border-bottom: 3px solid var(--line);
+    transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
   }
 
   nav a:hover{
-    color: var(--ink);
-    border-color: var(--clay);
+    transform: translateY(-3px);
+    border-bottom-color: var(--clay);
+    box-shadow: 0 6px 14px rgba(43,58,46,0.12);
   }
 
   main{
@@ -88,7 +103,7 @@
 
   section.category{
     padding-top: 56px;
-    scroll-margin-top: 64px;
+    scroll-margin-top: 76px;
   }
 
   section.category h2{
@@ -106,8 +121,16 @@
 
   .grid{
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+  }
+
+  @media (max-width: 700px){
+    .grid{ grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (max-width: 480px){
+    .grid{ grid-template-columns: repeat(2, 1fr); }
   }
 
   .item a.thumb{
@@ -133,8 +156,47 @@
 
   .item .name{
     margin-top: 10px;
-    font-size: 0.93rem;
+    font-size: 0.9rem;
     color: var(--ink);
+  }
+
+  .item.extra{ display: none; }
+
+  section.category.expanded .item.extra{ display: block; }
+
+  .view-all-wrap{
+    margin-top: 20px;
+  }
+
+  .view-all{
+    font-family: 'Work Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--clay);
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--clay);
+    padding: 0 0 2px;
+    cursor: pointer;
+  }
+
+  .view-all:hover{ color: var(--ink); border-color: var(--ink); }
+
+  /* Thanh menu hạng mục trên mobile: hiện đủ 6 ô cùng lúc, không cần vuốt ngang */
+  @media (max-width: 640px){
+    .nav-inner{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      overflow-x: visible;
+      padding: 14px 16px;
+    }
+    nav a{
+      text-align: center;
+      white-space: normal;
+      padding: 10px 6px;
+      font-size: 0.78rem;
+    }
   }
 
   footer{
@@ -152,8 +214,10 @@
 <body>
 
 <header>
-  <h1>Góc Đã Dùng</h1>
-  <p>Những món mình thực sự dùng qua và thấy đáng để nhắc lại — sắp theo từng nhóm nhỏ cho dễ tìm.</p>
+  <div class="header-inner">
+    <h1>Góc Đã Dùng</h1>
+    <p>Những món mình thực sự dùng qua và thấy đáng để nhắc lại — sắp theo từng nhóm nhỏ cho dễ tìm.</p>
+  </div>
 </header>
 
 <nav><div class="nav-inner" id="catNav"></div></nav>
@@ -180,56 +244,79 @@
 
    Muốn thêm sản phẩm: copy nguyên một dòng { name:..., image:..., link:... }
    trong "items" của hạng mục tương ứng.
+
+   LƯU Ý: trang chủ chỉ hiện CỐ ĐỊNH 5 sản phẩm đầu tiên của mỗi hạng mục.
+   Từ sản phẩm thứ 6 trở đi sẽ tự động ẩn, người xem bấm "Xem tất cả" mới thấy hết.
+   Muốn đổi số lượng hiện mặc định, sửa biến VISIBLE_COUNT bên dưới.
    ============================================================ */
+
+const VISIBLE_COUNT = 5;
 
 const CATEGORIES = [
   {
     name: "Chăm Sóc Da & Mátxa",
     items: [
       { name: "Điếu ngải cứu hơ huyệt đạo", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Lăn ngải cứu cho da mặt", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Đá lăn mátxa mặt", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Máy xông hơi mặt mini", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
+      { name: "Máy xông ngải cứu", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Lược diện chẩn", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Đá mátxa mặt", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Cây lăn diện chẩn", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Dầu mátxa mặt", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
     ]
   },
   {
     name: "Ăn Uống Dưỡng Nhan",
     items: [
-      { name: "Ngũ cốc dưỡng nhan", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Chè dưỡng nhan", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
       { name: "Trà dưỡng nhan", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Kombucha", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
+      { name: "Trà dưỡng huyết", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Chè dưỡng nhan", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Trà thảo mộc", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Trà hoa cúc", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Ngũ cốc hạt", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
     ]
   },
   {
     name: "Nhà Bếp",
     items: [
-      { name: "Bình giữ nhiệt thủy tinh", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Thớt gỗ tự nhiên", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Hũ thủy tinh đựng gia vị", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
+      { name: "Bột bánh xèo", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Phô mai mặn", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Bột rau câu dẻo", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Khuôn rau câu", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Khuôn làm bánh", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Hộp nhựa đựng pizza", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
     ]
   },
   {
     name: "Sách & Dụng Cụ Học Tập",
     items: [
-      { name: "Sách tiếng Anh được review", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Đèn bàn học chống cận", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Bộ bút highlight", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
+      { name: "Cặp xách", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Bút tô màu", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Bút không gôm", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Bút có gôm", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Nhãn vở", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Sách ngữ pháp tiếng Anh tiểu học", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
     ]
   },
   {
     name: "Sân Vườn",
     items: [
-      { name: "Đèn trang trí sân vườn", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Bình tưới cây dáng cổ điển", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Máy bơm hồ cá mini", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
+      { name: "Đèn LED sân vườn", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Máy bơm hồ cá", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Lọc Jmat", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Chổi lọc", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Hạt giống hoa mười giờ", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Hạt giống rau", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
     ]
   },
   {
     name: "Thiền & Năng Lượng",
     items: [
+      { name: "Chuông thạch anh", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
       { name: "Chuông xoay Tây Tạng", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
-      { name: "Vòng đá năng lượng", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
+      { name: "Gỗ thánh Palo Santo", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Xô thanh tẩy", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Đế đốt trầm", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" },
+      { name: "Đá thanh tẩy", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/" }
     ]
   }
 ];
@@ -269,9 +356,9 @@ CATEGORIES.forEach(cat => {
   const grid = document.createElement("div");
   grid.className = "grid";
 
-  cat.items.forEach(item => {
+  cat.items.forEach((item, index) => {
     const div = document.createElement("div");
-    div.className = "item";
+    div.className = "item" + (index >= VISIBLE_COUNT ? " extra" : "");
     div.innerHTML = `
       <a class="thumb" href="${item.link}" target="_blank" rel="noopener sponsored">
         <img src="${item.image}" alt="${item.name}" loading="lazy">
@@ -282,6 +369,23 @@ CATEGORIES.forEach(cat => {
   });
 
   section.appendChild(grid);
+
+  if(cat.items.length > VISIBLE_COUNT){
+    const wrap = document.createElement("div");
+    wrap.className = "view-all-wrap";
+    const btn = document.createElement("button");
+    btn.className = "view-all";
+    btn.textContent = "Xem tất cả (" + cat.items.length + " sản phẩm)";
+    btn.addEventListener("click", () => {
+      const expanded = section.classList.toggle("expanded");
+      btn.textContent = expanded
+        ? "Thu gọn"
+        : "Xem tất cả (" + cat.items.length + " sản phẩm)";
+    });
+    wrap.appendChild(btn);
+    section.appendChild(wrap);
+  }
+
   main.appendChild(section);
 });
 </script>
