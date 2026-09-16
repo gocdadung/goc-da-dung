@@ -367,8 +367,8 @@
    DỮ LIỆU SẢN PHẨM — chỉ cần chỉnh sửa trong mảng này
    ============================================================
    6 mục cố định, theo đúng thứ tự hiển thị trên lưới tab (3 cột x 2 hàng):
-   Hàng 1: Chăm Sóc Da & Năng Lượng — Ăn Uống Dưỡng Nhan — Đồ Dùng Quanh Nhà
-   Hàng 2: Sách & Dụng Cụ Học Tập — Hồ Cá & Sân Vườn — Sản Phẩm Hot Trend
+   Hàng 1: Ăn Uống Dưỡng Nhan — Sách & Dụng Cụ Học Tập — Đồ Dùng Quanh Nhà
+   Hàng 2: Hồ Cá & Sân Vườn — Dưỡng Sinh & Năng Lượng — Sản Phẩm Hot Trend
 
    Mỗi hạng mục là một object trong mảng CATEGORIES:
    - name: tên hạng mục (hiển thị làm tiêu đề section + menu)
@@ -395,7 +395,7 @@ const VISIBLE_COUNT_DESKTOP = 5;
 const VISIBLE_COUNT_MOBILE = 6;
 
 const CATEGORIES = [
-{
+  {
     name: "Ăn Uống Dưỡng Nhan",
     items: [
       { name: "Trà dưỡng nhan", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Uống đều mấy tuần thấy da sáng và đỡ nổi mụn hơn." },
@@ -405,8 +405,8 @@ const CATEGORIES = [
       { name: "Trà hoa cúc", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Uống trước khi ngủ giúp mình thư giãn hơn hẳn." },
       { name: "Ngũ cốc hạt", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Ăn sáng nhanh gọn mà vẫn no lâu." }
     ]
-  }, 
- {
+  },
+  {
     name: "Sách & Dụng Cụ Học Tập",
     items: [
       { name: "Cặp xách", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Bé đeo cả năm học chưa thấy bung chỉ." },
@@ -428,7 +428,7 @@ const CATEGORIES = [
       { name: "Hộp nhựa đựng pizza", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Đựng đồ ăn trữ tủ lạnh gọn, không ám mùi." }
     ]
   },
-    {
+  {
     name: "Hồ Cá & Sân Vườn",
     items: [
       { name: "Đèn LED sân vườn", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Sáng đều, bật ban đêm nhìn sân đẹp hẳn." },
@@ -439,7 +439,7 @@ const CATEGORIES = [
       { name: "Hạt giống rau", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Tỷ lệ nảy mầm cao, rau lên đều." }
     ]
   },
- {
+  {
     name: "Dưỡng Sinh & Năng Lượng",
     items: [
       { name: "Ngải cứu tự nhiên", image: "images/dieu-ngai-cuu-ho-huyet-dao.jpg", link: "https://s.shopee.vn/qjXBGBCeO", note: "Đốt lên hơ đều ở vùng cổ vai gáy hoặc vùng bị đau, tối dùng sẽ ngủ ngon hơn." },
@@ -455,6 +455,7 @@ const CATEGORIES = [
       { name: "Đế đốt trầm", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Chắc chắn, không lo đổ tàn ra bàn." },
       { name: "Đá thanh tẩy", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Lau sạch năng lượng đồ vật, hay dùng cho vòng tay." }
     ]
+
   },
   {
     name: "Sản Phẩm Hot Trend",
