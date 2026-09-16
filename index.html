@@ -7,351 +7,294 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg: #F4EFE3;
-    --band-b: #ECE4D2;
-    --card: #FFFFFF;
-    --ink: #2B3A2E;
-    --ink-soft: #6B6357;
-    --line: #DCD4C0;
-    --sage: #B9C4A9;
-    --clay: #A9825C;
-    --clay-dark: #8A6741;
-    --banner-bg: #2B3A2E;
-    --banner-text: #F4EFE3;
-    --banner-text-soft: #C7CFC1;
-  }
-
-  *{ box-sizing: border-box; }
-
-  body{
-    margin:0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: 'Work Sans', sans-serif;
-    line-height: 1.5;
-  }
-
-  /* Banner: gradient chéo + 2 quầng sáng trang trí (sage & terracotta) để tạo chiều sâu, sang hơn nền phẳng */
-  header{
-    background: linear-gradient(135deg, #37473A 0%, #202B23 55%, #2B3A2E 100%);
-    color: var(--banner-text);
-    position: relative;
-    overflow: hidden;
-  }
-
-  header::before{
-    content:"";
-    position:absolute;
-    top:-140px; right:-110px;
-    width:380px; height:380px;
-    border-radius:50%;
-    background: radial-gradient(circle, rgba(185,196,169,0.20), transparent 70%);
-    pointer-events:none;
-  }
-
-  header::after{
-    content:"";
-    position:absolute;
-    bottom:-100px; left:-70px;
-    width:280px; height:280px;
-    border-radius:50%;
-    background: radial-gradient(circle, rgba(169,130,92,0.18), transparent 70%);
-    pointer-events:none;
-  }
-
-  header .header-inner{
-    position: relative;
-    z-index: 1;
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 56px 24px 40px;
-  }
-
-  header h1{
-    font-family: 'Fraunces', serif;
-    font-weight: 500;
-    font-size: clamp(2rem, 5vw, 2.8rem);
-    margin: 0 0 18px;
-    letter-spacing: -0.01em;
-    color: var(--banner-text);
-    position: relative;
-    display: inline-block;
-    padding-bottom: 16px;
-  }
-
-  /* chi tiết nhấn terracotta dưới tiêu đề banner — đồng bộ với chi tiết nhấn dưới tiêu đề mỗi mục */
-  header h1::after{
-    content:"";
-    position:absolute;
-    left:0; bottom:0;
-    width: 56px;
-    height: 3px;
-    border-radius: 2px;
-    background: var(--clay);
-  }
-
-  header p{
-    max-width: 46ch;
-    color: var(--banner-text-soft);
-    font-size: 1.02rem;
-    margin: 0;
-  }
-
-  nav{
-    position: sticky;
-    top: 0;
-    background: var(--bg);
-    z-index: 10;
-    border-bottom: 1px solid var(--line);
-  }
-
-  /* hàng tab: lưới cố định 3 cột x 2 hàng, dùng chung cấu trúc cho cả PC và mobile để không mục nào bị cắt/che */
-  .nav-inner{
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 18px 24px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-  }
-
-  nav a{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: var(--ink);
-    text-decoration: none;
-    font-size: 0.98rem;
-    font-weight: 500;
-    white-space: normal;
-    line-height: 1.25;
-    padding: 16px 14px;
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    border-bottom: 3px solid var(--line);
-    transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease, background .15s ease, color .15s ease;
-  }
-
-  nav a:hover{
-    transform: translateY(-3px);
-    border-bottom-color: var(--clay);
-    box-shadow: 0 6px 14px rgba(43,58,46,0.12);
-  }
-
-  /* tab đang chọn — dùng màu nhấn terracotta */
-  nav a.active{
-    background: var(--clay);
-    border-color: var(--clay);
-    color: #fff;
-  }
-
-  nav a.active:hover{
-    transform: none;
-  }
-
-  /* mỗi mục nằm trong 1 "band" full-width để tạo sắc độ xen kẽ, dễ phân biệt mà vẫn cùng tông màu */
-  .band{ width: 100%; }
-  .band-a{ background: var(--bg); }
-  .band-b{ background: var(--band-b); }
-
-  .band-inner{
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  section.category{
-    padding-top: 56px;
-    padding-bottom: 56px;
-    scroll-margin-top: 96px;
-    border-top: 1px solid var(--line);
-  }
-
-  .band:first-of-type section.category{
-    border-top: none;
-  }
-
-  section.category h2{
-    font-family: 'Fraunces', serif;
-    font-weight: 500;
-    font-size: 1.5rem;
-    margin: 0 0 4px;
-    padding-bottom: 10px;
-    position: relative;
-  }
-
-  /* chi tiết nhỏ terracotta dưới mỗi tiêu đề mục */
-  section.category h2::after{
-    content:"";
-    display:block;
-    position:absolute;
-    left:0; bottom:0;
-    width: 36px;
-    height: 3px;
-    border-radius: 2px;
-    background: var(--clay);
-  }
-
-  section.category .count{
-    color: var(--ink-soft);
-    font-size: 0.88rem;
-    margin: 0 0 24px;
-  }
-
-  .grid{
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 16px;
-  }
-
-  @media (max-width: 700px){
-    .grid{ grid-template-columns: repeat(3, 1fr); }
-  }
-
-  @media (max-width: 480px){
-    .grid{ grid-template-columns: repeat(2, 1fr); }
-  }
-
-  /* thẻ sản phẩm — trắng + bóng đổ nhẹ để nổi rõ trên nền */
-  .item a.thumb{
-    display: block;
-    aspect-ratio: 1 / 1;
-    border-radius: 6px;
-    overflow: hidden;
-    background: var(--card);
-    border: 1px solid var(--line);
-    box-shadow: 0 1px 4px rgba(43,58,46,0.08);
-    transition: box-shadow .2s ease, border-color .2s ease;
-  }
-
-  .item a.thumb:hover{
-    box-shadow: 0 8px 18px rgba(43,58,46,0.16);
-    border-color: var(--clay);
-  }
-
-  .item img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform .3s ease;
-  }
-
-  .item a.thumb:hover img{
-    transform: scale(1.04);
-  }
-
-  .item .name{
-    margin-top: 10px;
-    font-size: 0.9rem;
-    color: var(--ink);
-    font-weight: 500;
-  }
-
-  /* dòng cảm nhận cá nhân mỗi món */
-  .item .note{
-    margin-top: 4px;
-    font-size: 0.8rem;
-    font-style: italic;
-    color: var(--ink-soft);
-    line-height: 1.35;
-  }
-
-  /* nút hành động terracotta cho từng sản phẩm */
-  .item .cta{
-    display: inline-block;
-    margin-top: 8px;
-    padding: 5px 12px;
-    border-radius: 999px;
-    background: var(--clay);
-    color: #fff;
-    font-size: 0.74rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background .15s ease;
-  }
-
-  .item .cta:hover{
-    background: var(--clay-dark);
-  }
-
-  .item.extra{ display: none; }
-
-  section.category.expanded .item.extra{ display: block; }
-
-  /* sản phẩm thứ 6 (index 5): mobile luôn hiện, desktop coi như "extra" tới khi bấm Xem tất cả */
-  @media (max-width: 700px){
-    .item.mobile-visible{ display: block !important; }
-  }
-
-  .view-all-wrap{
-    margin-top: 20px;
-  }
-
-  .view-all{
-    font-family: 'Work Sans', sans-serif;
-    font-size: 0.88rem;
-    font-weight: 500;
-    color: var(--clay);
-    background: none;
-    border: none;
-    border-bottom: 1px solid var(--clay);
-    padding: 0 0 2px;
-    cursor: pointer;
-  }
-
-  .view-all:hover{ color: var(--clay-dark); border-color: var(--clay-dark); }
-
-  /* mục chỉ có đúng 6 sản phẩm: mobile đã hiện đủ nên ẩn luôn nút Xem tất cả trên mobile */
-  @media (max-width: 700px){
-    .view-all-wrap.mobile-hide{ display: none; }
-  }
-
-  /* mục chưa có sản phẩm */
-  .empty-note{
-    color: var(--ink-soft);
-    font-size: 0.92rem;
-    font-style: italic;
-    padding: 18px 20px;
-    background: var(--card);
-    border: 1px dashed var(--line);
-    border-radius: 8px;
-  }
-
-  /* Thu nhỏ hàng tab trên màn hình hẹp để 3 cột vẫn vừa vặn, không đổi cấu trúc lưới */
-  @media (max-width: 640px){
-    .nav-inner{
-      gap: 8px;
-      padding: 14px 16px;
-    }
-    nav a{
-      padding: 10px 6px;
-      font-size: 0.78rem;
-    }
-  }
-
-  footer{
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 32px 24px 64px;
-    border-top: 1px solid var(--line);
-    color: var(--ink-soft);
-    font-size: 0.85rem;
-  }
-
-  footer a{ color: var(--clay); }
+:root{
+--bg: #F4EFE3;
+--band-b: #ECE4D2;
+--card: #FFFFFF;
+--ink: #2B3A2E;
+--ink-soft: #6B6357;
+--line: #DCD4C0;
+--sage: #B9C4A9;
+--clay: #A9825C;
+--clay-dark: #8A6741;
+--banner-bg: #2B3A2E;
+--banner-text: #F4EFE3;
+--banner-text-soft: #C7CFC1;
+}
+*{ box-sizing: border-box; }
+body{
+margin:0;
+background: var(--bg);
+color: var(--ink);
+font-family: 'Work Sans', sans-serif;
+line-height: 1.5;
+}
+header{
+background: linear-gradient(135deg, #37473A 0%, #202B23 55%, #2B3A2E 100%);
+color: var(--banner-text);
+position: relative;
+overflow: hidden;
+}
+header::before{
+content:"";
+position:absolute;
+top:-140px; right:-110px;
+width:380px; height:380px;
+border-radius:50%;
+background: radial-gradient(circle, rgba(185,196,169,0.20), transparent 70%);
+pointer-events:none;
+}
+header::after{
+content:"";
+position:absolute;
+bottom:-100px; left:-70px;
+width:280px; height:280px;
+border-radius:50%;
+background: radial-gradient(circle, rgba(169,130,92,0.18), transparent 70%);
+pointer-events:none;
+}
+header .header-inner{
+position: relative;
+z-index: 1;
+max-width: 960px;
+margin: 0 auto;
+padding: 56px 24px 40px;
+}
+header h1{
+font-family: 'Fraunces', serif;
+font-weight: 500;
+font-size: clamp(2rem, 5vw, 2.8rem);
+margin: 0 0 18px;
+letter-spacing: -0.01em;
+color: var(--banner-text);
+position: relative;
+display: inline-block;
+padding-bottom: 16px;
+}
+header h1::after{
+content:"";
+position:absolute;
+left:0; bottom:0;
+width: 56px;
+height: 3px;
+border-radius: 2px;
+background: var(--clay);
+}
+header p{
+max-width: 46ch;
+color: var(--banner-text-soft);
+font-size: 1.02rem;
+margin: 0;
+}
+nav{
+position: sticky;
+top: 0;
+background: var(--bg);
+z-index: 10;
+border-bottom: 1px solid var(--line);
+}
+.nav-inner{
+max-width: 960px;
+margin: 0 auto;
+padding: 18px 24px;
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 12px;
+}
+nav a{
+display: flex;
+align-items: center;
+justify-content: center;
+text-align: center;
+color: var(--ink);
+text-decoration: none;
+font-size: 0.98rem;
+font-weight: 500;
+white-space: normal;
+line-height: 1.25;
+padding: 16px 14px;
+background: var(--card);
+border: 1px solid var(--line);
+border-radius: 8px;
+border-bottom: 3px solid var(--line);
+transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease, background .15s ease, color .15s ease;
+}
+nav a:hover{
+transform: translateY(-3px);
+border-bottom-color: var(--clay);
+box-shadow: 0 6px 14px rgba(43,58,46,0.12);
+}
+nav a.active{
+background: var(--clay);
+border-color: var(--clay);
+color: #fff;
+}
+nav a.active:hover{
+transform: none;
+}
+.band{ width: 100%; }
+.band-a{ background: var(--bg); }
+.band-b{ background: var(--band-b); }
+.band-inner{
+max-width: 960px;
+margin: 0 auto;
+padding: 0 24px;
+}
+section.category{
+padding-top: 56px;
+padding-bottom: 56px;
+scroll-margin-top: 96px;
+border-top: 1px solid var(--line);
+}
+.band:first-of-type section.category{
+border-top: none;
+}
+section.category h2{
+font-family: 'Fraunces', serif;
+font-weight: 500;
+font-size: 1.5rem;
+margin: 0 0 4px;
+padding-bottom: 10px;
+position: relative;
+}
+section.category h2::after{
+content:"";
+display:block;
+position:absolute;
+left:0; bottom:0;
+width: 36px;
+height: 3px;
+border-radius: 2px;
+background: var(--clay);
+}
+section.category .count{
+color: var(--ink-soft);
+font-size: 0.88rem;
+margin: 0 0 24px;
+}
+.grid{
+display: grid;
+grid-template-columns: repeat(5, 1fr);
+gap: 16px;
+}
+@media (max-width: 700px){
+.grid{ grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 480px){
+.grid{ grid-template-columns: repeat(2, 1fr); }
+}
+.item a.thumb{
+display: block;
+aspect-ratio: 1 / 1;
+border-radius: 6px;
+overflow: hidden;
+background: var(--card);
+border: 1px solid var(--line);
+box-shadow: 0 1px 4px rgba(43,58,46,0.08);
+transition: box-shadow .2s ease, border-color .2s ease;
+}
+.item a.thumb:hover{
+box-shadow: 0 8px 18px rgba(43,58,46,0.16);
+border-color: var(--clay);
+}
+.item img{
+width: 100%;
+height: 100%;
+object-fit: cover;
+display: block;
+transition: transform .3s ease;
+}
+.item a.thumb:hover img{
+transform: scale(1.04);
+}
+.item .name{
+margin-top: 10px;
+font-size: 0.9rem;
+color: var(--ink);
+font-weight: 500;
+}
+.item .note{
+margin-top: 4px;
+font-size: 0.8rem;
+font-style: italic;
+color: var(--ink-soft);
+line-height: 1.35;
+}
+.item .cta{
+display: inline-block;
+margin-top: 8px;
+padding: 5px 12px;
+border-radius: 999px;
+background: var(--clay);
+color: #fff;
+font-size: 0.74rem;
+font-weight: 600;
+text-decoration: none;
+transition: background .15s ease;
+}
+.item .cta:hover{
+background: var(--clay-dark);
+}
+.item.extra{ display: none; }
+section.category.expanded .item.extra{ display: block; }
+@media (max-width: 700px){
+.item.mobile-visible{ display: block !important; }
+}
+.view-all-wrap{
+margin-top: 20px;
+}
+.view-all{
+font-family: 'Work Sans', sans-serif;
+font-size: 0.88rem;
+font-weight: 500;
+color: var(--clay);
+background: none;
+border: none;
+border-bottom: 1px solid var(--clay);
+padding: 0 0 2px;
+cursor: pointer;
+}
+.view-all:hover{ color: var(--clay-dark); border-color: var(--clay-dark); }
+@media (max-width: 700px){
+.view-all-wrap.mobile-hide{ display: none; }
+}
+.empty-note{
+color: var(--ink-soft);
+font-size: 0.92rem;
+font-style: italic;
+padding: 18px 20px;
+background: var(--card);
+border: 1px dashed var(--line);
+border-radius: 8px;
+}
+@media (max-width: 640px){
+.nav-inner{
+gap: 8px;
+padding: 14px 16px;
+}
+nav a{
+padding: 10px 6px;
+font-size: 0.78rem;
+}
+}
+footer{
+max-width: 960px;
+margin: 0 auto;
+padding: 32px 24px 64px;
+border-top: 1px solid var(--line);
+color: var(--ink-soft);
+font-size: 0.85rem;
+}
+footer a{ color: var(--clay); }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="header-inner">
-    <h1>Góc Đã Dùng</h1>
-    <p>Những món mình đã trải nghiệm và thấy đáng để gợi ý — sắp theo từng nhóm nhỏ cho dễ tìm.</p>
-  </div>
+<div class="header-inner">
+<h1>Góc Đã Dùng</h1>
+<p>Những món mình đã trải nghiệm và thấy đáng để gợi ý — sắp theo từng nhóm nhỏ cho dễ tìm.</p>
+</div>
 </header>
 
 <nav><div class="nav-inner" id="catNav"></div></nav>
@@ -359,37 +302,34 @@
 <div id="main"></div>
 
 <footer>
-  Trang này có chứa liên kết tiếp thị liên kết (affiliate) tới Shopee — khi mua hàng qua đây, mình nhận được một khoản hoa hồng nhỏ mà không phát sinh thêm chi phí cho bạn. Nhớ áp mã giảm giá và mã vận chuyển ở mục Shopee Voucher để có giá tốt nhất nhé. Cảm ơn bạn đã ghé trang!
+Trang này có chứa liên kết tiếp thị liên kết (affiliate) tới Shopee — khi mua hàng qua đây, mình nhận được một khoản hoa hồng nhỏ mà không phát sinh thêm chi phí cho bạn. Nhớ áp mã giảm giá và mã vận chuyển ở mục Shopee Voucher để có giá tốt nhất nhé. Cảm ơn bạn đã ghé trang!
 </footer>
 
 <script>
 /* ============================================================
-   DỮ LIỆU SẢN PHẨM — chỉ cần chỉnh sửa trong mảng này
-   ============================================================
-   6 mục cố định, theo đúng thứ tự hiển thị trên lưới tab (3 cột x 2 hàng):
-   Hàng 1: Ăn Uống Dưỡng Nhan — Sách & Dụng Cụ Học Tập — Đồ Dùng Quanh Nhà
-   Hàng 2: Hồ Cá & Sân Vườn — Dưỡng Sinh & Năng Lượng — Sản Phẩm Hot Trend
+DỮ LIỆU SẢN PHẨM — chỉ cần chỉnh sửa trong mảng này
+============================================================
+6 mục cố định, theo đúng thứ tự hiển thị trên lưới tab (3 cột x 2 hàng):
+H�ng 1: Ăn Uống Dưỡng Nhan — Sách & Dụng Cụ Học Tập — Đồ Dùng Quanh Nhà
+H�ng 2: Hồ Cá & Sân Vườn — Dưỡng Sinh & Năng Lượng — Sản Phẩm Hot Trend
 
-   Mỗi hạng mục là một object trong mảng CATEGORIES:
-   - name: tên hạng mục (hiển thị làm tiêu đề section + menu)
-   - items: danh sách sản phẩm trong hạng mục đó (để [] nếu chưa có sản phẩm nào)
-       - name: tên sản phẩm
-       - image: link ảnh sản phẩm
-       - link: link Shopee affiliate của sản phẩm
-       - note: MỘT DÒNG cảm nhận cá nhân về món này
+Mỗi hạng mục là một object trong mảng CATEGORIES:
+- name: tên hạng mục (hiển thị làm tiêu đề section + menu)
+- items: danh sách sản phẩm trong hạng mục đó (để [] nếu chưa có sản phẩm nào)
+  - name: tên sản phẩm
+  - image: link ảnh sản phẩm
+  - link: link Shopee affiliate của sản phẩm
+  - note: MỘT DÒNG cảm nhận cá nhân về món này
 
-   LƯU Ý:
-   - "Sản Phẩm Hot Trend" đang là demo, thay ảnh/link Shopee thật khi có.
-   - "Đồ Dùng Quanh Nhà" gồm cả nguyên liệu nấu ăn, dụng cụ bếp và đồ nội thất/
-     trang trí phòng khách (bàn, ghế, bình hoa...) — sắp nhóm bếp lên trước,
-     nhóm nội thất/trang trí xuống sau trong danh sách item để người tìm đồ
-     bếp thấy đúng nhu cầu trước.
+LƯU Ý QUAN TRỌNG VỀ DẤU PHẨY: mỗi sản phẩm là một dòng { ... }, giữa
+các dòng PHẢI có dấu phẩy, chỉ dòng CUỐI CÙNG trong mỗi mục là KHÔNG có
+dấu phẩy. Thiếu/thừa dấu phẩy sẽ làm cả trang trắng không hiện gì.
 
-   HIỂN THỊ:
-   - PC: mỗi mục hiện cố định 5 sản phẩm đầu.
-   - Mobile: mỗi mục hiện cố định 6 sản phẩm đầu (tránh lẻ ô trống).
-   - Từ sản phẩm tiếp theo trở đi ẩn, bấm "Xem tất cả" mới hiện hết.
-   ============================================================ */
+HIỂN THỊ:
+- PC: mỗi mục hiện cố định 5 sản phẩm đầu.
+- Mobile: mỗi mục hiện cố định 6 sản phẩm đầu (tránh lẻ ô trống).
+- Từ sản phẩm tiếp theo trở đi ẩn, bấm "Xem tất cả" mới hiện hết.
+============================================================ */
 
 const VISIBLE_COUNT_DESKTOP = 5;
 const VISIBLE_COUNT_MOBILE = 6;
@@ -398,12 +338,12 @@ const CATEGORIES = [
   {
     name: "Ăn Uống Dưỡng Nhan",
     items: [
-      { name: "Trà dưỡng nhan", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Uống đều mấy tuần thấy da sáng và đỡ nổi mụn hơn." },
-      { name: "Trà dưỡng huyết", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Hợp những ngày mệt, uống ấm dễ chịu bụng." },
-      { name: "Chè dưỡng nhan", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Nấu nhanh, ăn vặt buổi chiều mà không thấy có lỗi." },
-      { name: "Trà thảo mộc", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Vị nhẹ, uống thay nước lọc buổi tối được." },
-      { name: "Trà hoa cúc", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Uống trước khi ngủ giúp mình thư giãn hơn hẳn." },
-      { name: "Ngũ cốc hạt", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Ăn sáng nhanh gọn mà vẫn no lâu." }
+      { name: "Trà Gạo Lứt", image: "images/tra-gao-lut.jpg", link: "https://s.shopee.vn/1VzEGJ2xjU", note: "Pha nóng thơm mùi gạo rang, uống thay trà thường mỗi ngày được." },
+      { name: "Trà Bồ Công Anh", image: "images/tra-bo-cong-anh.jpg", link: "https://s.shopee.vn/60Rdclgi0t", note: "Vị thanh nhẹ, uống buổi tối thấy người nhẹ nhõm hơn." },
+      { name: "Bột Ca Cao Nguyên Chất", image: "images/bot-ca-cao.jpg", link: "https://s.shopee.vn/9AOfV7Xpcw", note: "Pha sữa nóng buổi sáng, thơm đậm không cần thêm đường." },
+      { name: "Bột Hạt Sen Gạo Lứt Mè Đen", image: "images/bot-hat-sen-gao-lut-me-den.jpg", link: "https://s.shopee.vn/905FIqyXPE", note: "Pha nhanh thay bữa sáng, no lâu mà không nặng bụng." },
+      { name: "Set Chè Dưỡng Nhan Tuyết Yến", image: "images/che-duong-nhan.jpg", link: "https://s.shopee.vn/1qc4jHsw5Y", note: "Nấu 1 lần ăn được vài ngày, để tủ lạnh ăn mát rất hợp mùa nóng." },
+      { name: "Set Chè Sâm Bổ Lượng", image: "images/che-sam-bo-luong.jpg", link: "https://s.shopee.vn/80Ci5iqjSA", note: "Đủ vị, nấu xong thêm đá là có ngay ly chè mát lạnh." }
     ]
   },
   {
@@ -456,7 +396,6 @@ const CATEGORIES = [
       { name: "Đế đốt trầm", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Chắc chắn, không lo đổ tàn ra bàn." },
       { name: "Đá thanh tẩy", image: "https://placehold.co/400x400/EFE8D8/6B6357?text=Anh+san+pham", link: "https://shopee.vn/", note: "Lau sạch năng lượng đồ vật, hay dùng cho vòng tay." }
     ]
-
   },
   {
     name: "Sản Phẩm Hot Trend",
@@ -472,8 +411,8 @@ const CATEGORIES = [
 ];
 
 /* ============================================================
-   PHẦN DƯỚI ĐÂY LÀ CODE HIỂN THỊ — không cần chỉnh sửa
-   ============================================================ */
+PHẦN DƯỚI ĐÂY LÀ CODE HIỂN THỊ — không cần chỉnh sửa
+============================================================ */
 
 function slugify(str){
   return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-");
@@ -495,7 +434,6 @@ CATEGORIES.forEach((cat, catIndex) => {
 
   const band = document.createElement("div");
   band.className = "band " + (catIndex % 2 === 0 ? "band-a" : "band-b");
-
   const bandInner = document.createElement("div");
   bandInner.className = "band-inner";
 
@@ -569,7 +507,6 @@ CATEGORIES.forEach((cat, catIndex) => {
   sections.push(section);
 });
 
-/* Đánh dấu tab đang chọn theo mục đang cuộn tới trong khung nhìn */
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     const idx = sections.indexOf(entry.target);
@@ -582,7 +519,6 @@ const observer = new IntersectionObserver((entries) => {
 }, { rootMargin: "-40% 0px -55% 0px", threshold: 0 });
 
 sections.forEach(s => observer.observe(s));
-
 if (navLinks.length){
   navLinks[0].classList.add("active");
 }
