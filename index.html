@@ -439,6 +439,7 @@ const VISIBLE_COUNT_MOBILE = 6;
 const CATEGORIES = [
   {
     name: "Ăn Uống Dưỡng Nhan",
+    slug: "anuongduongnhan",
     items: [
       { name: "Trà Gạo Lứt", image: "images/tra-gao-lut.jpg", link: "https://s.shopee.vn/1VzEGJ2xjU", note: "Pha nóng thơm mùi gạo rang, uống thay trà thường mỗi ngày được." },
       { name: "Trà Bồ Công Anh", image: "images/tra-bo-cong-anh.jpg", link: "https://s.shopee.vn/60Rdclgi0t", note: "Vị thanh nhẹ, uống buổi tối thấy người nhẹ nhõm hơn." },
@@ -450,6 +451,7 @@ const CATEGORIES = [
   },
   {
     name: "Sách & Dụng Cụ Học Tập",
+    slug: "sachdungcuhoctap",
     items: [
       { name: "Sách Nhà Giả Kim", image: "images/sach-nha-gia-kim.jpg", link: "https://s.shopee.vn/qjXt5rPXO", note: "Đọc chậm rãi buổi tối, câu nào cũng đáng gạch chân." },
       { name: "Sách Mind Map Tiếng Anh", image: "images/sach-mindmap-tieng-anh.jpg", link: "https://s.shopee.vn/8fSPEPrhnT", note: "Sơ đồ hoá từ vựng dễ nhớ hơn học chay nhiều." },
@@ -461,6 +463,7 @@ const CATEGORIES = [
   },
   {
     name: "Đồ Dùng Quanh Nhà",
+    slug: "dodungquanhnha",
     items: [
       { name: "Xốt Phô Mai", image: "images/xot-pho-mai.jpg", link: "https://s.shopee.vn/1BMOq9TWEg", note: "Rưới lên đồ chiên là ngon gấp đôi, béo mịn không bị tanh." },
       { name: "Dầu Dừa Tinh Khiết", image: "images/dau-dua-nguyen-chat.jpg", link: "https://s.shopee.vn/LnHrWgF8v", note: "Dùng nấu ăn được mà dưỡng da, dưỡng tóc cũng tốt." },
@@ -472,6 +475,7 @@ const CATEGORIES = [
   },
   {
     name: "Hồ Cá & Sân Vườn",
+    slug: "hocasanvuon",
     items: [
       { name: "Cám Cá Koi Đạm Cao", image: "images/cam-ca-koi-dam-cao.jpg", link: "https://s.shopee.vn/6Al51kODU4", note: "Cá lớn nhanh, lên màu rõ rệt sau vài tuần cho ăn." },
       { name: "Máy Bơm Hồ Cá Koi", image: "images/may-bom-ho-ca-koi.jpg", link: "https://s.shopee.vn/gQ8TJCwsA", note: "Chạy êm, hồ nhà mình dùng ổn định cả năm." },
@@ -485,6 +489,7 @@ const CATEGORIES = [
   },
   {
     name: "Dưỡng Sinh & Năng Lượng",
+    slug: "duongsinhnangluong",
     items: [
       { name: "Ngải cứu tự nhiên", image: "images/dieu-ngai-cuu-ho-huyet-dao.jpg", link: "https://s.shopee.vn/qjXBGBCeO", note: "Đốt lên hơ đều ở vùng cổ vai gáy hoặc vùng bị đau, tối ngủ cũng sẽ ngon hơn nha." },
       { name: "Hộp ngải cứu đa năng", image: "images/may-xong-ngai-cuu.jpg", link: "https://s.shopee.vn/5AsWLBwxSH", note: "Lăn trên vùng mặt giúp lưu thông khí huyết, giúp da thư giãn hơn nè." },
@@ -503,6 +508,7 @@ const CATEGORIES = [
   },
   {
     name: "Sản Phẩm Hot Trend",
+    slug: "sanphamhottrend",
     items: [
       { name: "Bánh Tráng Bò Tỏi Chua Cay", image: "images/banh-trang-bo-toi.jpg", link: "https://s.shopee.vn/AUu4CF7S2Y", note: "Vị cay tê, ăn vặt buổi chiều rất cuốn." },
       { name: "Thơm (Dứa) Sấy Dẻo Muối Ớt", image: "images/thom-say-deo-muoi-ot.jpg", link: "https://s.shopee.vn/BTrt7keV1", note: "Vị chua ngọt cay hòa quyện, ăn hoài không ngán." },
@@ -529,7 +535,7 @@ const navLinks = [];
 const sections = [];
 
 CATEGORIES.forEach((cat, catIndex) => {
-  const slug = slugify(cat.name);
+  const slug = cat.slug || slugify(cat.name);
 
   const navLink = document.createElement("a");
   navLink.href = "#" + slug;
