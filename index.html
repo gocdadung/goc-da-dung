@@ -267,7 +267,95 @@ background: var(--card);
 border: 1px dashed var(--line);
 border-radius: 8px;
 }
+.search-wrap{
+max-width: 960px;
+margin: 0 auto;
+padding: 16px 24px 0;
+}
+.search-box{
+position: relative;
+}
+.search-box input{
+width: 100%;
+padding: 12px 16px 12px 40px;
+border: 1px solid var(--line);
+border-radius: 8px;
+background: var(--card);
+color: var(--ink);
+font-family: 'Work Sans', sans-serif;
+font-size: 0.94rem;
+outline: none;
+transition: border-color .15s ease, box-shadow .15s ease;
+}
+.search-box input:focus{
+border-color: var(--clay);
+box-shadow: 0 0 0 3px rgba(169,130,92,0.15);
+}
+.search-box svg{
+position: absolute;
+left: 12px;
+top: 50%;
+transform: translateY(-50%);
+width: 16px;
+height: 16px;
+color: var(--ink-soft);
+pointer-events: none;
+}
+.search-clear{
+position: absolute;
+right: 10px;
+top: 50%;
+transform: translateY(-50%);
+background: none;
+border: none;
+color: var(--ink-soft);
+font-size: 1.1rem;
+line-height: 1;
+cursor: pointer;
+padding: 4px;
+display: none;
+}
+.search-box.has-value .search-clear{ display: block; }
+.item.search-hide{ display: none !important; }
+.category.search-hide-cat{ display: none; }
+.no-result{
+color: var(--ink-soft);
+font-size: 0.92rem;
+font-style: italic;
+padding: 18px 20px;
+background: var(--card);
+border: 1px dashed var(--line);
+border-radius: 8px;
+max-width: 960px;
+margin: 24px auto;
+display: none;
+}
+.no-result.show{ display: block; }
+#backToTop{
+position: fixed;
+right: 20px;
+bottom: 24px;
+width: 44px;
+height: 44px;
+border-radius: 50%;
+background: var(--clay);
+color: #fff;
+border: none;
+display: none;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+box-shadow: 0 4px 12px rgba(43,58,46,0.25);
+transition: background .15s ease, transform .15s ease;
+z-index: 20;
+}
+#backToTop:hover{
+background: var(--clay-dark);
+transform: translateY(-2px);
+}
+#backToTop.show{ display: flex; }
 @media (max-width: 640px){
+.search-wrap{ padding: 12px 16px 0; }
 .nav-inner{
 gap: 8px;
 padding: 14px 16px;
@@ -297,9 +385,23 @@ footer a{ color: var(--clay); }
 </div>
 </header>
 
+<div class="search-wrap">
+  <div class="search-box" id="searchBox">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    <input type="text" id="searchInput" placeholder="Tìm sản phẩm theo tên...">
+    <button class="search-clear" id="searchClear" aria-label="Xoá tìm kiếm">×</button>
+  </div>
+</div>
+
 <nav><div class="nav-inner" id="catNav"></div></nav>
 
 <div id="main"></div>
+
+<p class="no-result" id="noResult">Không tìm thấy sản phẩm phù hợp — thử từ khoá khác xem sao nhé.</p>
+
+<button id="backToTop" aria-label="Về đầu trang">
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+</button>
 
 <footer>
 Trang này có chứa liên kết tiếp thị liên kết (affiliate) tới Shopee — khi mua hàng qua đây, mình nhận được một khoản hoa hồng nhỏ mà không phát sinh thêm chi phí cho bạn. Nhớ áp mã giảm giá và mã vận chuyển ở mục Shopee Voucher để có giá tốt nhất nhé. Cảm ơn bạn đã ghé trang!
@@ -310,8 +412,8 @@ Trang này có chứa liên kết tiếp thị liên kết (affiliate) tới Sho
 DỮ LIỆU SẢN PHẨM — chỉ cần chỉnh sửa trong mảng này
 ============================================================
 6 mục cố định, theo đúng thứ tự hiển thị trên lưới tab (3 cột x 2 hàng):
-H�ng 1: Ăn Uống Dưỡng Nhan — Sách & Dụng Cụ Học Tập — Đồ Dùng Quanh Nhà
-H�ng 2: Hồ Cá & Sân Vườn — Dưỡng Sinh & Năng Lượng — Sản Phẩm Hot Trend
+Hàng 1: Ăn Uống Dưỡng Nhan — Sách & Dụng Cụ Học Tập — Đồ Dùng Quanh Nhà
+Hàng 2: Hồ Cá & Sân Vườn — Dưỡng Sinh & Năng Lượng — Sản Phẩm Hot Trend
 
 Mỗi hạng mục là một object trong mảng CATEGORIES:
 - name: tên hạng mục (hiển thị làm tiêu đề section + menu)
@@ -374,9 +476,9 @@ const CATEGORIES = [
       { name: "Cám Cá Koi Đạm Cao", image: "images/cam-ca-koi-dam-cao.jpg", link: "https://s.shopee.vn/6Al51kODU4", note: "Cá lớn nhanh, lên màu rõ rệt sau vài tuần cho ăn." },
       { name: "Máy Bơm Hồ Cá Koi", image: "images/may-bom-ho-ca-koi.jpg", link: "https://s.shopee.vn/gQ8TJCwsA", note: "Chạy êm, hồ nhà mình dùng ổn định cả năm." },
       { name: "Lọc Mặt Hồ Cá", image: "images/loc-mat-ho-ca.jpg", link: "https://s.shopee.vn/9Ki6mfchVu", note: "Hớt sạch váng và lá rụng trên mặt nước, đỡ phải vớt tay." },
+      { name: "Chổi Lọc Hồ Cá", image: "images/choi-loc-ho-ca.jpg", link: "https://s.shopee.vn/7Kx2P78Mly", note: "Vệ sinh hệ lọc nhanh, không tốn nhiều nước." },
       { name: "Cây Thuỷ Sinh Cho Hồ Cá", image: "images/cay-thuy-sinh.jpg", link: "https://s.shopee.vn/112yrPlQfs", note: "Lên xanh nhanh, hồ nhìn tự nhiên hẳn." },
       { name: "Đèn Hắt Tường Mini", image: "images/den-hat-tuong-mini.jpg", link: "https://s.shopee.vn/4qFhVLSXqK", note: "Ánh sáng vàng ấm, gắn tường sân vườn đẹp về đêm." },
-      { name: "Chổi Lọc Hồ Cá", image: "images/choi-loc-ho-ca.jpg", link: "https://s.shopee.vn/7Kx2P78Mly", note: "Vệ sinh hệ lọc nhanh, không tốn nhiều nước." },
       { name: "Đèn Cắm Đất Mini Sân Vườn", image: "images/den-cam-dat-mini.jpg", link: "https://s.shopee.vn/9peNSYR7MD", note: "Cắm dọc lối đi, tự sạc năng lượng mặt trời khỏi lo dây điện." },
       { name: "Miếng Jmat Lọc Hồ Cá", image: "images/mieng-jmat-loc-ho-ca.jpg", link: "https://s.shopee.vn/5AsXpPVkKA", note: "Lọc nước hồ sạch, ít phải thay nước hơn." }
     ]
@@ -385,7 +487,7 @@ const CATEGORIES = [
     name: "Dưỡng Sinh & Năng Lượng",
     items: [
       { name: "Ngải cứu tự nhiên", image: "images/dieu-ngai-cuu-ho-huyet-dao.jpg", link: "https://s.shopee.vn/qjXBGBCeO", note: "Đốt lên hơ đều ở vùng cổ vai gáy hoặc vùng bị đau, tối ngủ cũng sẽ ngon hơn nha." },
-      { name: "Bình ngải cứu đá Bian", image: "images/may-xong-ngai-cuu.jpg", link: "https://s.shopee.vn/5AsWLBwxSH", note: "Lăn trên vùng mặt giúp lưu thông khí huyết, giúp da thư giãn hơn nè." },
+      { name: "Hộp ngải cứu đa năng", image: "images/may-xong-ngai-cuu.jpg", link: "https://s.shopee.vn/5AsWLBwxSH", note: "Lăn trên vùng mặt giúp lưu thông khí huyết, giúp da thư giãn hơn nè." },
       { name: "Cây lăn massage mặt", image: "images/cay-lan-dien-chan.jpg", link: "https://s.shopee.vn/20vUZETDUi", note: "Massage các huyệt bạch huyết dưới da mặt giúp nâng cơ, da săn chắc hơn nhé." },
       { name: "Búa ngải cứu thảo dược", image: "images/bua-ngai-cuu.jpg", link: "https://s.shopee.vn/30o1zYkTHc", note: "Còn gọi là gậy massage cổ-vai-gáy-toàn thân giúp đả thông kinh mạch trước khi đi ngủ đã lắm nha." },
       { name: "Chuông thạch anh", image: "images/chuong-thach-anh.jpg", link: "https://s.shopee.vn/gQ6z0JUgS", note: "Âm thanh trong, thiền dễ tĩnh tâm hơn." },
@@ -525,6 +627,65 @@ sections.forEach(s => observer.observe(s));
 if (navLinks.length){
   navLinks[0].classList.add("active");
 }
+
+/* ===== TÌM KIẾM (không phân biệt dấu tiếng Việt) ===== */
+function removeDiacritics(str){
+  return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/đ/g, "d");
+}
+
+const searchInput = document.getElementById("searchInput");
+const searchBox = document.getElementById("searchBox");
+const searchClear = document.getElementById("searchClear");
+const noResult = document.getElementById("noResult");
+const allItemEls = Array.from(document.querySelectorAll(".item"));
+
+function runSearch(){
+  const raw = searchInput.value.trim();
+  const query = removeDiacritics(raw);
+  searchBox.classList.toggle("has-value", raw.length > 0);
+
+  if (query === ""){
+    allItemEls.forEach(el => { el.style.display = ""; });
+    sections.forEach(s => s.classList.remove("search-hide-cat"));
+    noResult.classList.remove("show");
+    return;
+  }
+
+  let totalVisible = 0;
+
+  sections.forEach((section, idx) => {
+    const cat = CATEGORIES[idx];
+    let visibleInCat = 0;
+    const itemEls = section.querySelectorAll(".item");
+    itemEls.forEach((el, i) => {
+      const product = cat.items[i];
+      const haystack = removeDiacritics(product.name + " " + (product.note || ""));
+      const match = haystack.includes(query);
+      el.style.display = match ? "block" : "none";
+      if (match) visibleInCat++;
+    });
+    section.classList.toggle("search-hide-cat", visibleInCat === 0);
+    totalVisible += visibleInCat;
+  });
+
+  noResult.classList.toggle("show", totalVisible === 0);
+}
+
+searchInput.addEventListener("input", runSearch);
+searchClear.addEventListener("click", () => {
+  searchInput.value = "";
+  runSearch();
+  searchInput.focus();
+});
+
+/* ===== NÚT VỀ ĐẦU TRANG ===== */
+const backToTop = document.getElementById("backToTop");
+window.addEventListener("scroll", () => {
+  backToTop.classList.toggle("show", window.scrollY > 500);
+});
+backToTop.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
 </script>
 
 </body>
