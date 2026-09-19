@@ -440,18 +440,22 @@ const CATEGORIES = [
   {
     name: "Ăn Uống Dưỡng Nhan",
     slug: "anuongduongnhan",
+    description: "Những món ăn, đồ uống thân thiện cùng các nguyên liệu nấu ăn mình hay dùng nè.",
     items: [
       { name: "Trà Gạo Lứt", image: "images/tra-gao-lut.jpg", link: "https://s.shopee.vn/1VzEGJ2xjU", note: "Pha nóng thơm mùi gạo rang, uống thay trà thường mỗi ngày được." },
       { name: "Trà Bồ Công Anh", image: "images/tra-bo-cong-anh.jpg", link: "https://s.shopee.vn/60Rdclgi0t", note: "Vị thanh nhẹ, uống buổi tối thấy người nhẹ nhõm hơn." },
       { name: "Bột Ca Cao Nguyên Chất", image: "images/bot-ca-cao.jpg", link: "https://s.shopee.vn/9AOfV7Xpcw", note: "Pha sữa nóng buổi sáng, thơm đậm không cần thêm đường." },
       { name: "Bột Hạt Sen Gạo Lứt Mè Đen", image: "images/bot-hat-sen-gao-lut-me-den.jpg", link: "https://s.shopee.vn/905FIqyXPE", note: "Pha nhanh thay bữa sáng, no lâu mà không nặng bụng." },
       { name: "Set Chè Dưỡng Nhan Tuyết Yến", image: "images/che-duong-nhan.jpg", link: "https://s.shopee.vn/1qc4jHsw5Y", note: "Nấu 1 lần ăn được vài ngày, để tủ lạnh ăn mát rất hợp mùa nóng." },
-      { name: "Set Chè Sâm Bổ Lượng", image: "images/che-sam-bo-luong.jpg", link: "https://s.shopee.vn/80Ci5iqjSA", note: "Đủ vị, nấu xong thêm đá là có ngay ly chè mát lạnh." }
+      { name: "Set Chè Sâm Bổ Lượng", image: "images/che-sam-bo-luong.jpg", link: "https://s.shopee.vn/80Ci5iqjSA", note: "Đủ vị, nấu xong thêm đá là có ngay ly chè mát lạnh." },
+      { name: "Xốt Phô Mai", image: "images/xot-pho-mai.jpg", link: "https://s.shopee.vn/1BMOq9TWEg", note: "Rưới lên đồ chiên là ngon gấp đôi, béo mịn không bị tanh." },
+      { name: "Dầu Dừa Tinh Khiết", image: "images/dau-dua-nguyen-chat.jpg", link: "https://s.shopee.vn/LnHrWgF8v", note: "Dùng nấu ăn được mà dưỡng da, dưỡng tóc cũng tốt." }
     ]
   },
   {
     name: "Sách & Dụng Cụ Học Tập",
     slug: "sachdungcuhoctap",
+    description: "Sách hay và đồ dùng học tập mình chọn lọc, phần lớn dùng cho việc gia sư.",
     items: [
       { name: "Sách Nhà Giả Kim", image: "images/sach-nha-gia-kim.jpg", link: "https://s.shopee.vn/qjXt5rPXO", note: "Đọc chậm rãi buổi tối, câu nào cũng đáng gạch chân." },
       { name: "Sách Mind Map Tiếng Anh", image: "images/sach-mindmap-tieng-anh.jpg", link: "https://s.shopee.vn/8fSPEPrhnT", note: "Sơ đồ hoá từ vựng dễ nhớ hơn học chay nhiều." },
@@ -462,11 +466,10 @@ const CATEGORIES = [
     ]
   },
   {
-    name: "Đồ Dùng Trong Nhà",
+    name: "Đồ Dùng Quanh Nhà",
     slug: "dodungtrongnha",
+    description: "Đồ bếp và các vật dụng tiện lợi phục vụ nhà cửa và cuộc sống hàng ngày mà mình hay mua.",
     items: [
-      { name: "Xốt Phô Mai", image: "images/xot-pho-mai.jpg", link: "https://s.shopee.vn/1BMOq9TWEg", note: "Rưới lên đồ chiên là ngon gấp đôi, béo mịn không bị tanh." },
-      { name: "Dầu Dừa Tinh Khiết", image: "images/dau-dua-nguyen-chat.jpg", link: "https://s.shopee.vn/LnHrWgF8v", note: "Dùng nấu ăn được mà dưỡng da, dưỡng tóc cũng tốt." },
       { name: "Miếng Lót Nồi Silicon Chống Nóng", image: "images/mieng-lot-noi-silicon.jpg", link: "https://s.shopee.vn/9AOgQnyg3n", note: "Chịu nhiệt tốt, đặt nồi nóng lên bàn không lo cháy mặt bàn." },
       { name: "Cây Lau Nhà Tự Vắt", image: "images/cay-lau-nha-tu-vat.jpg", link: "https://s.shopee.vn/7ptIrGIsEa", note: "Vắt khô nhanh, lau nhà xong tay không bị ướt." },
       { name: "Sữa Tắm Muối Hồng Lifebuoy", image: "images/sua-tam-muoi-lb.jpg", link: "https://s.shopee.vn/9AOgNaKPln", note: "Mùi thơm nhẹ, tắm xong da sạch thoáng cả ngày." },
@@ -477,6 +480,7 @@ const CATEGORIES = [
   {
     name: "Hồ Cá & Sân Vườn",
     slug: "hocasanvuon",
+    description: "Các thiết bị chăm sóc hồ cá và sân vườn nhà mình từng dùng.",
     items: [
       { name: "Cám Cá Koi Đạm Cao", image: "images/cam-ca-koi-dam-cao.jpg", link: "https://s.shopee.vn/6Al51kODU4", note: "Cá lớn nhanh, lên màu rõ rệt sau vài tuần cho ăn." },
       { name: "Máy Bơm Hồ Cá Koi", image: "images/may-bom-ho-ca-koi.jpg", link: "https://s.shopee.vn/gQ8TJCwsA", note: "Chạy êm, hồ nhà mình dùng ổn định cả năm." },
@@ -492,6 +496,7 @@ const CATEGORIES = [
   {
     name: "Dưỡng Sinh & Năng Lượng",
     slug: "duongsinhnangluong",
+    description: "Dụng cụ dưỡng sinh chăm sóc cơ thể và nâng cao năng lượng tốt lắm nha.",
     items: [
       { name: "Ngải cứu tự nhiên", image: "images/dieu-ngai-cuu-ho-huyet-dao.jpg", link: "https://s.shopee.vn/qjXBGBCeO", note: "Đốt lên hơ đều ở vùng cổ vai gáy hoặc vùng bị đau, tối ngủ cũng sẽ ngon hơn nha." },
       { name: "Hộp ngải cứu đa năng", image: "images/may-xong-ngai-cuu.jpg", link: "https://s.shopee.vn/5AsWLBwxSH", note: "Lăn trên vùng mặt giúp lưu thông khí huyết, giúp da thư giãn hơn nè." },
@@ -511,6 +516,7 @@ const CATEGORIES = [
   {
     name: "Sản Phẩm Hot Trend",
     slug: "sanphamhottrend",
+    description: "Vài món đồ đang hot trên mạng, có cái mình đã dùng có cái chưa. Mọi người tham khảo nhé!",
     items: [
       { name: "Bánh Tráng Bò Tỏi Chua Cay", image: "images/banh-trang-bo-toi.jpg", link: "https://s.shopee.vn/AUu4CF7S2Y", note: "Vị cay tê, ăn vặt buổi chiều rất cuốn." },
       { name: "Thơm (Dứa) Sấy Dẻo Muối Ớt", image: "images/thom-say-deo-muoi-ot.jpg", link: "https://s.shopee.vn/BTrt7keV1", note: "Vị chua ngọt cay hòa quyện, ăn hoài không ngán." },
@@ -564,10 +570,12 @@ CATEGORIES.forEach((cat, catIndex) => {
     empty.textContent = "Đang cập nhật sản phẩm — quay lại sớm nhé!";
     section.appendChild(empty);
   } else {
+      if (cat.description){
     const count = document.createElement("p");
     count.className = "count";
-    count.textContent = cat.items.length + " sản phẩm";
+    count.textContent = cat.description;
     section.appendChild(count);
+  }
 
     const grid = document.createElement("div");
     grid.className = "grid";
